@@ -6,6 +6,7 @@ nltk.download('punkt')
 nltk.download('stopwords')
 from nltk.stem.porter import PorterStemmer
 import string
+from sklearn.naive_bayes import MultinomialNB
 
 ps = PorterStemmer()
 
