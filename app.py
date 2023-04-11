@@ -6,7 +6,6 @@ nltk.download('punkt')
 nltk.download('stopwords')
 from nltk.stem.porter import PorterStemmer
 import string
-from sklearn.naive_bayes import MultinomialNB
 
 ps = PorterStemmer()
 
@@ -48,19 +47,13 @@ if st.button('Predict'):
     transformed_sms = transform_text(input_sms)
     # 2. vectorize
     vector_input = tfidf.transform([transformed_sms])
-    # 3. Create and fit the MultinomialNB model
-    model = MultinomialNB()
-    model.fit(X_train, y_train)  # You need to define X_train and y_train with your training data and labels
-    # 4. predict
+    # 3. predict
     result = model.predict(vector_input)[0]
-    # 5. Display
+    # 4. Display
     if result == 1:
         st.header("This Message Is a Spam")
     else:
         st.header("This Message Is Not a Spam")
-
-
-
 
 
 
