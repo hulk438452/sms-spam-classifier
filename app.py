@@ -6,9 +6,12 @@ nltk.download('punkt')
 nltk.download('stopwords')
 from nltk.stem.porter import PorterStemmer
 import string
+from collections import Counter
+#from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+st.set_option('deprecation.showPyplotGlobalUse', False)
 
 ps = PorterStemmer()
-
 
 def transform_text(text):
     text = text.lower()
@@ -34,12 +37,14 @@ def transform_text(text):
 
     return " ".join(y)
 
-tfidf = pickle.load(open('vectorizer.pkl','rb'))
-model = pickle.load(open('model.pkl','rb'))
+
+tfidf = pickle.load(open('vectorizer.pkl', 'rb'))
+model = pickle.load(open('model.pkl', 'rb'))
 
 st.title("SMS Spam Classifier")
 
 input_sms = st.text_area("Enter the message")
+
 
 if st.button('Predict'):
 
@@ -50,30 +55,32 @@ if st.button('Predict'):
     # 3. predict
     result = model.predict(vector_input)[0]
     # 4. Display
+    st.write("Original Message: {}".format(input_sms))
+    st.write("Preprocessed Message: {}".format(transformed_sms))
     if result == 1:
         st.header("This Message Is a Spam")
     else:
         st.header("This Message Is Not a Spam")
 
+    st.write("Number of characters:", len(input_sms))
+    st.write("Number of words (excluding punctuation):", len(transformed_sms.split()))
+
+    # Word Cloud
+   # wc = WordCloud(background_color="white", width=800, height=400).generate(transformed_sms)
+    st.write("Word Cloud")
+    #st.image(wc.to_array())
+
+    # Bar Chart
+    words = transformed_sms.split()
+    word_counts = Counter(words)
+    top_words = word_counts.most_common(10)
+    plt.bar([w[0] for w in top_words], [w[1] for w in top_words])
+    plt.xticks(rotation=45)
+    plt.xlabel('Words')
+    plt.ylabel('Frequency')
+    plt.title('Word Frequency')
+    st.pyplot()
 
 
-def remove_punctuation(text):
-    """
-    Removes punctuation from a string and returns the cleaned text.
-    """
-    # Create a string of all punctuation characters
-    punctuations = string.punctuation
-
-    # Remove punctuation from the input text
-    cleaned_text = "".join(char for char in text if char not in punctuations)
-
-    return cleaned_text
-
-# Remove punctuation from the user's input
-if input_sms:
-    cleaned_input = remove_punctuation(input_sms)
-
-    # Count the number of words in the cleaned input
-    word_count = len(cleaned_input.split())
-
-    st.write("Number of words (excluding punctuation):", word_count)
+if st.button('Reset'):
+    input_sms = ''
