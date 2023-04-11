@@ -47,9 +47,12 @@ if st.button('Predict'):
     transformed_sms = transform_text(input_sms)
     # 2. vectorize
     vector_input = tfidf.transform([transformed_sms])
-    # 3. predict
+    # 3. Create and fit the MultinomialNB model
+    model = MultinomialNB()
+    model.fit(X_train, y_train)  # You need to define X_train and y_train with your training data and labels
+    # 4. predict
     result = model.predict(vector_input)[0]
-    # 4. Display
+    # 5. Display
     if result == 1:
         st.header("This Message Is a Spam")
     else:
