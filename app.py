@@ -67,7 +67,7 @@ if st.button('Predict'):
 
     # Word Cloud
    # wc = WordCloud(background_color="white", width=800, height=400).generate(transformed_sms)
-    st.write("Word Cloud")
+#    st.write("Word Cloud")
     #st.image(wc.to_array())
 
     # Bar Chart
