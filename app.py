@@ -7,11 +7,33 @@ nltk.download('stopwords')
 from nltk.stem.porter import PorterStemmer
 import string
 from collections import Counter
-#from wordcloud import WordCloud
 import matplotlib.pyplot as plt
+import base64
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
 ps = PorterStemmer()
+
+import streamlit as st
+
+def add_bg_from_local(image_files):
+    with open(image_files[0], "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read())
+    # with open(image_files[1], "rb") as image_file:
+    #     encoded_string1 = base64.b64encode(image_file.read())
+    st.markdown(
+    """
+    <style>
+      .stApp {
+          background-image: url(data:image/png;base64,"""+encoded_string.decode()+""");
+          background-size: cover;
+      }
+    </style>"""
+    ,
+    unsafe_allow_html=True
+    )
+add_bg_from_local([r'D:\yash\sms-spam-classifier-main\6.jpg'])#
+
+# Your Streamlit app code goes below
 
 def transform_text(text):
     text = text.lower()
@@ -55,8 +77,10 @@ if st.button('Predict'):
     # 3. predict
     result = model.predict(vector_input)[0]
     # 4. Display
+
     st.write("Original Message: {}".format(input_sms))
     st.write("Preprocessed Message: {}".format(transformed_sms))
+
     if result == 1:
         st.header("This Message Is a Spam")
     else:
@@ -67,7 +91,7 @@ if st.button('Predict'):
 
     # Word Cloud
    # wc = WordCloud(background_color="white", width=800, height=400).generate(transformed_sms)
-#    st.write("Word Cloud")
+    #st.write("Word Cloud")
     #st.image(wc.to_array())
 
     # Bar Chart
