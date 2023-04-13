@@ -31,7 +31,7 @@ def add_bg_from_local(image_files):
     ,
     unsafe_allow_html=True
     )
-add_bg_from_local([r'4.jpg'])#
+add_bg_from_local([r'6.jpg'])#
 
 # Your Streamlit app code goes below
 
